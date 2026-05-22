@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Futures Safety Rechner – 6E EUR/USD · Jun15'26</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3350;
+      --accent: #4f7cff;
+      --accent-glow: rgba(79,124,255,0.18);
+      --green: #22c55e;
+      --green-dim: rgba(34,197,94,0.12);
+      --yellow: #f59e0b;
+      --yellow-dim: rgba(245,158,11,0.12);
+      --red: #ef4444;
+      --red-dim: rgba(239,68,68,0.14);
+      --text: #e8eaf6;
+      --text-muted: #7b82a8;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 16px 64px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+    header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #a5b4fc 0%, #4f7cff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p {
+      margin-top: 6px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .layout {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .card-title {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* ── Input table ── */
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 520px) {
+      .input-grid { grid-template-columns: 1fr; }
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .field label span.unit {
+      color: var(--accent);
+      font-size: 0.75rem;
+      margin-left: 4px;
+    }
+    .field input[type="number"] {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 1rem;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -moz-appearance: textfield;
+    }
+    .field input[type="number"]::-webkit-outer-spin-button,
+    .field input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .field input[type="number"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    /* ── Results table ── */
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .result-table tr + tr td { border-top: 1px solid var(--border); }
+    .result-table td {
+      padding: 13px 4px;
+      font-size: 0.95rem;
+    }
+    .result-table td:first-child { color: var(--text-muted); font-size: 0.88rem; }
+    .result-table td:last-child {
+      text-align: right;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      font-size: 1.05rem;
+    }
+
+    /* ── Panic bar ── */
+    .panic-section {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .panic-threshold-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .panic-threshold-row label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .panic-threshold-row input[type="number"] {
+      width: 140px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 8px 12px;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+    .panic-threshold-row input[type="number"]::-webkit-outer-spin-button,
+    .panic-threshold-row input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .panic-threshold-row input[type="number"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .progress-wrap {
+      position: relative;
+      height: 10px;
+      background: var(--surface2);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.4s ease, background 0.3s;
+    }
+
+    .panic-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background 0.3s, border-color 0.3s;
+      border: 1px solid transparent;
+    }
+    .panic-status .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .panic-status.ok    { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+    .panic-status.warn  { background: var(--yellow-dim); border-color: var(--yellow); color: var(--yellow); }
+    .panic-status.danger{ background: var(--red-dim); border-color: var(--red); color: var(--red); }
+    .panic-status.ok .dot    { background: var(--green); }
+    .panic-status.warn .dot  { background: var(--yellow); }
+    .panic-status.danger .dot{ background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+    /* ── Risk section ── */
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 520px) { .risk-grid { grid-template-columns: 1fr; } }
+
+    .risk-metric {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+    }
+    .risk-metric .rm-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .risk-metric .rm-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+    .risk-metric .rm-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* value colours */
+    .clr-green  { color: var(--green); }
+    .clr-yellow { color: var(--yellow); }
+    .clr-red    { color: var(--red); }
+    .clr-accent { color: var(--accent); }
+    .clr-muted  { color: var(--text-muted); }
+
+    /* ── Pips warning badge ── */
+    .pips-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .pips-badge.ok     { background: var(--green-dim); color: var(--green); }
+    .pips-badge.warn   { background: var(--yellow-dim); color: var(--yellow); }
+    .pips-badge.danger { background: var(--red-dim); color: var(--red); }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Futures Safety Rechner</h1>
+  <p>6E · EUR/USD · CME Globex · Jun15'26 · 125.000 EUR/Kontrakt &nbsp;|&nbsp; Tick = 0,00005 · Pip = 0,0001 · $12,50 / Kontrakt</p>
+</header>
+
+<div class="layout">
+
+  <!-- ── IBKR Live-Daten Banner ── -->
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;">
+    <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;flex-basis:100%">
+      IBKR Snapshot · EUR ∞ Jun15'26(125.000) CME · Stand 22.05.2026
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:24px;width:100%">
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Kurs (Bid)</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--text)">1,16180</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Kurs (Ask)</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--text)">1,16185</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Spread</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--text)">0,00005 (1 Tick)</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Ersteinschuss / Kontrakt</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--accent)">3.658,22 $</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Mindesteinschuss / Kontrakt</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--accent)">3.181,06 $</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 1. Eingaben ── -->
+  <div class="card">
+    <div class="card-title">Eingaben
+      <span style="float:right;font-weight:400;color:var(--accent);font-size:0.75rem;letter-spacing:0">
+        Quelle: IBKR · 22.05.2026
+      </span>
+    </div>
+    <div class="input-grid">
+
+      <div class="field">
+        <label>Kontostand aktuell <span class="unit">€</span>
+          <span style="color:var(--text-muted);font-size:0.72rem">(Eigenkapital / Net Liq)</span>
+        </label>
+        <input type="number" id="balance" value="22000" min="0" step="100" />
+      </div>
+
+      <div class="field">
+        <label>Anzahl Kontrakte <span class="unit">6E</span></label>
+        <input type="number" id="contracts" value="5" min="1" step="1" />
+      </div>
+
+      <div class="field">
+        <label>Mindesteinschuss / Kontrakt <span class="unit">$</span>
+          <span style="color:var(--text-muted);font-size:0.72rem">(Maintenance Margin)</span>
+        </label>
+        <input type="number" id="margin" value="3181.06" min="0" step="0.01" />
+      </div>
+
+      <div class="field">
+        <label>Ersteinschuss / Kontrakt <span class="unit">$</span>
+          <span style="color:var(--text-muted);font-size:0.72rem">(Initial Margin)</span>
+        </label>
+        <input type="number" id="initmargin" value="3658.22" min="0" step="0.01" />
+      </div>
+
+      <div class="field">
+        <label>EUR/USD Kurs <span class="unit">aktuell</span></label>
+        <input type="number" id="fxrate" value="1.16180" min="0.01" step="0.00001" />
+      </div>
+
+      <div class="field">
+        <label>Einstiegskurs EUR/USD <span class="unit">für Liquidation</span></label>
+        <input type="number" id="entryprice" value="1.16180" min="0.01" step="0.00001" />
+      </div>
+
+      <div class="field">
+        <label>Max. Verlust pro Trade <span class="unit">%</span></label>
+        <input type="number" id="maxloss" value="5" min="0.1" max="100" step="0.5" />
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 2. Ergebnisse ── -->
+  <div class="card">
+    <div class="card-title">Berechnete Kennzahlen</div>
+    <table class="result-table">
+      <tbody>
+        <tr>
+          <td>Ersteinschuss gesamt <span style="font-size:0.75rem;color:var(--text-muted)">(Initial Margin)</span></td>
+          <td id="r-initmargin-total" class="clr-accent">–</td>
+        </tr>
+        <tr>
+          <td>Mindesteinschuss gesamt <span style="font-size:0.75rem;color:var(--text-muted)">(Maintenance Margin)</span></td>
+          <td id="r-margin-total" class="clr-accent">–</td>
+        </tr>
+        <tr>
+          <td>Puffer über Mindesteinschuss <span style="font-size:0.75rem;color:var(--text-muted)">(Kontostand – Mindest.)</span></td>
+          <td id="r-buffer-eur">–</td>
+        </tr>
+        <tr>
+          <td>Puffer in Pips
+            <span id="pips-badge" class="pips-badge" style="display:none"></span>
+          </td>
+          <td id="r-buffer-pips">–</td>
+        </tr>
+        <tr>
+          <td>Zwangsliquidierungskurs (est.)</td>
+          <td id="r-liq-price" class="clr-red">–</td>
+        </tr>
+        <tr>
+          <td>Stop-Loss max. Verlust (€)</td>
+          <td id="r-stop-eur" class="clr-yellow">–</td>
+        </tr>
+        <tr>
+          <td>Stop-Loss in Pips</td>
+          <td id="r-stop-pips" class="clr-yellow">–</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── 3. Panic-Button ── -->
+  <div class="card">
+    <div class="card-title">Panic-Button</div>
+    <div class="panic-section">
+      <div class="panic-threshold-row">
+        <label>Puffer-Grenze <span style="color:var(--accent)">€</span></label>
+        <input type="number" id="threshold" value="2000" min="0" step="100" />
+        <span style="font-size:0.8rem;color:var(--text-muted)">Alarm wenn Puffer ≤ Grenze</span>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-bar" id="panic-bar"></div>
+      </div>
+
+      <div class="panic-status" id="panic-status">
+        <span class="dot"></span>
+        <span id="panic-text">–</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. Risiko-Dashboard ── -->
+  <div class="card">
+    <div class="card-title">Risiko-Dashboard</div>
+    <div class="risk-grid">
+      <div class="risk-metric">
+        <div class="rm-label">Kapital-Auslastung</div>
+        <div class="rm-value" id="rd-utilization">–</div>
+        <div class="rm-sub">Margin / Kontostand</div>
+      </div>
+      <div class="risk-metric">
+        <div class="rm-label">Puffer / Kontrakt</div>
+        <div class="rm-value" id="rd-buffer-per">–</div>
+        <div class="rm-sub">€ freies Kapital je Kontrakt</div>
+      </div>
+      <div class="risk-metric">
+        <div class="rm-label">Max. Verlust</div>
+        <div class="rm-value" id="rd-max-loss">–</div>
+        <div class="rm-sub">bei gesetztem %-Ziel</div>
+      </div>
+      <div class="risk-metric">
+        <div class="rm-label">Empf. Kontrakte</div>
+        <div class="rm-value" id="rd-safe-contracts">–</div>
+        <div class="rm-sub">bei ≥ 200 Pip Puffer (Faustregel)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  Nur zur Orientierung. Keine Anlageberatung. &nbsp;·&nbsp;
+  Maintenance Margin kann sich täglich ändern – immer beim Broker prüfen.
+</footer>
+
+<script>
+  const $ = id => document.getElementById(id);
+
+  function fmt(n, decimals = 2, prefix = '') {
+    if (!isFinite(n)) return '–';
+    return prefix + n.toLocaleString('de-DE', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  }
+
+  function colourClass(val, warnLow, dangerLow) {
+    if (val <= dangerLow) return 'clr-red';
+    if (val <= warnLow)   return 'clr-yellow';
+    return 'clr-green';
+  }
+
+  function calculate() {
+    const balance     = parseFloat($('balance').value)     || 0;
+    const contracts   = parseFloat($('contracts').value)   || 0;
+    const margin      = parseFloat($('margin').value)      || 0;
+    const initmargin  = parseFloat($('initmargin').value)  || 0;
+    const fxrate      = parseFloat($('fxrate').value)      || 1;
+    const threshold   = parseFloat($('threshold').value)   || 0;
+    const maxlossPct  = parseFloat($('maxloss').value)     || 5;
+    const entryprice  = parseFloat($('entryprice').value)  || fxrate;
+
+    // ── Core formulas ──
+    const initMarginTotalEur = (contracts * initmargin) / fxrate;
+    const marginTotalEur     = (contracts * margin) / fxrate;
+    const bufferEur          = balance - marginTotalEur;
+    // 1 Pip = 0.0001 EUR/USD = $12.50 per contract (6E)
+    // pip value in EUR = 12.50 / fxrate per contract
+    const pipValueEur    = (12.50 / fxrate) * contracts;
+    const bufferPips     = pipValueEur > 0 ? bufferEur / pipValueEur : 0;
+    const liqPrice       = entryprice - bufferPips * 0.0001;
+
+    // ── Stop-loss ──
+    const stopLossEur    = balance * (maxlossPct / 100);
+    const stopLossPips   = pipValueEur > 0 ? stopLossEur / pipValueEur : 0;
+
+    // ── Render results ──
+    $('r-initmargin-total').textContent = fmt(initMarginTotalEur, 2) + ' €';
+    $('r-margin-total').textContent     = fmt(marginTotalEur, 2) + ' €';
+    $('r-liq-price').textContent        = fmt(liqPrice, 5);
+
+    const bufEurEl = $('r-buffer-eur');
+    bufEurEl.textContent = fmt(bufferEur, 2) + ' €';
+    bufEurEl.className   = colourClass(bufferEur, threshold * 1.5, threshold);
+
+    const bufPipsEl = $('r-buffer-pips');
+    bufPipsEl.textContent = fmt(bufferPips, 1) + ' Pips';
+    bufPipsEl.className   = colourClass(bufferPips, 100, 50);
+
+    // Pips badge
+    const badge = $('pips-badge');
+    if (bufferPips <= 50) {
+      badge.style.display = 'inline-block';
+      badge.textContent   = 'KRITISCH';
+      badge.className     = 'pips-badge danger';
+    } else if (bufferPips <= 100) {
+      badge.style.display = 'inline-block';
+      badge.textContent   = 'NIEDRIG';
+      badge.className     = 'pips-badge warn';
+    } else {
+      badge.style.display = 'none';
+    }
+
+    $('r-stop-eur').textContent  = fmt(stopLossEur, 2) + ' €';
+    $('r-stop-pips').textContent = fmt(stopLossPips, 1) + ' Pips';
+
+    // ── Panic bar ──
+    const panicRatio  = threshold > 0 ? Math.min(bufferEur / (threshold * 3), 1) : 1;
+    const panicPct    = Math.max(0, Math.round(panicRatio * 100));
+    const bar         = $('panic-bar');
+    const status      = $('panic-status');
+    const statusText  = $('panic-text');
+
+    bar.style.width = panicPct + '%';
+
+    if (bufferEur <= threshold) {
+      bar.style.background = 'var(--red)';
+      status.className     = 'panic-status danger';
+      statusText.textContent = `PANIC! Puffer (${fmt(bufferEur, 0)} €) ≤ Grenze (${fmt(threshold, 0)} €) — Position reduzieren oder Kapital nachschießen!`;
+    } else if (bufferEur <= threshold * 1.5) {
+      bar.style.background = 'var(--yellow)';
+      status.className     = 'panic-status warn';
+      statusText.textContent = `WARNUNG: Puffer (${fmt(bufferEur, 0)} €) nähert sich der Grenze (${fmt(threshold, 0)} €) — Vorsicht!`;
+    } else {
+      bar.style.background = 'var(--green)';
+      status.className     = 'panic-status ok';
+      statusText.textContent = `Sicher: Puffer (${fmt(bufferEur, 0)} €) liegt über der Grenze (${fmt(threshold, 0)} €).`;
+    }
+
+    // ── Risk dashboard ──
+    const utilization = balance > 0 ? (marginTotalEur / balance) * 100 : 0;
+    const bufPerCont  = contracts > 0 ? bufferEur / contracts : 0;
+
+    const utilEl = $('rd-utilization');
+    utilEl.textContent = fmt(utilization, 1) + ' %';
+    utilEl.className   = 'rm-value ' + colourClass(100 - utilization, 40, 20);
+
+    const bufPerEl = $('rd-buffer-per');
+    bufPerEl.textContent = fmt(bufPerCont, 0) + ' €';
+    bufPerEl.className   = 'rm-value ' + colourClass(bufPerCont, 500, 200);
+
+    $('rd-max-loss').textContent = fmt(stopLossEur, 0) + ' €';
+
+    // Safe contracts: largest n so that maintenance-margin buffer >= 200 pips
+    // and initial margin can be funded from balance.
+    // buffer_pips = (balance - n*margin/fx) / ((12.50/fx)*n) >= 200
+    // => n <= balance / ((margin + 200*12.50) / fx)
+    // Also: balance must cover initial margin => n <= balance / (initmargin/fx)
+    const safeByPips   = Math.floor(balance / ((margin + 200 * 12.50) / fxrate));
+    const safeByInit   = Math.floor(balance / (initmargin / fxrate));
+    const safeContracts = Math.min(safeByPips, safeByInit);
+    const safeEl = $('rd-safe-contracts');
+    safeEl.textContent = safeContracts >= 1 ? safeContracts : '< 1';
+    safeEl.className   = 'rm-value ' + (safeContracts >= contracts ? 'clr-green' : 'clr-yellow');
+  }
+
+  // Attach listeners
+  ['balance','contracts','margin','initmargin','fxrate','threshold','maxloss','entryprice']
+    .forEach(id => $(`${id}`).addEventListener('input', calculate));
+
+  calculate();
+</script>
+</body>
+</html>
