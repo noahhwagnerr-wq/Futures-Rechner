@@ -33,170 +33,71 @@
       gap: 12px;
     }
 
-    h1 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      align-self: flex-start;
-      max-width: 440px;
-      width: 100%;
-    }
+    h1 { font-size: 1.05rem; font-weight: 700; align-self: flex-start; max-width: 440px; width: 100%; }
     h1 small { font-size: 0.78rem; font-weight: 400; color: var(--muted); margin-left: 6px; }
 
     .wrap { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 12px; }
 
-    /* ── Card ── */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 16px;
-    }
-    .clabel {
-      font-size: 0.63rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; }
+    .clabel { font-size: 0.63rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
 
-    /* ── Field rows ── */
+    /* Fields */
     .fields { display: flex; flex-direction: column; }
-    .field {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 10px;
-    }
+    .field { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 10px; }
     .field:first-child { padding-top: 0; }
     .field:last-child  { border-bottom: none; padding-bottom: 0; }
-    .flabel {
-      font-size: 0.88rem;
-      color: var(--text);
-      flex: 1;
-      min-width: 0;
-    }
+    .flabel { font-size: 0.88rem; color: var(--text); flex: 1; min-width: 0; }
     .flabel small { display: block; font-size: 0.7rem; color: var(--muted); margin-top: 1px; }
-    .field input {
-      width: 120px;
+
+    input {
+      width: 130px;
       text-align: right;
       background: var(--field);
       border: 1px solid var(--border);
       border-radius: 8px;
       color: var(--text);
-      font-size: 0.98rem;
+      font-size: 1rem;
       font-weight: 600;
-      padding: 8px 10px;
+      padding: 9px 11px;
       outline: none;
       flex-shrink: 0;
-      -moz-appearance: textfield;
+      -webkit-appearance: none;
+      appearance: none;
       transition: border-color .15s;
     }
-    .field input::-webkit-inner-spin-button,
-    .field input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .field input:focus { border-color: var(--accent); }
+    input:focus { border-color: var(--accent); }
 
-    /* ── Tabs ── */
-    .tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 4px;
-      gap: 4px;
-    }
-    .tab {
-      padding: 10px;
-      border-radius: 9px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-align: center;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      transition: background .2s, color .2s;
-    }
-    .tab.active {
-      background: var(--field);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
+    /* Tabs */
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 4px; gap: 4px; }
+    .tab { padding: 10px; border-radius: 9px; font-size: 0.85rem; font-weight: 600; text-align: center; cursor: pointer; border: none; background: transparent; color: var(--muted); transition: background .2s, color .2s; -webkit-tap-highlight-color: transparent; }
+    .tab.active { background: var(--field); color: var(--text); border: 1px solid var(--border); }
 
-    /* ── Tab panels ── */
     .panel { display: none; flex-direction: column; gap: 12px; }
     .panel.active { display: flex; }
 
-    /* ── Results grid ── */
-    .results {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .result {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 14px 12px;
-    }
+    /* Direction toggle */
+    .dir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px; }
+    .dir-btn { padding: 10px; border-radius: 9px; font-size: 0.88rem; font-weight: 600; border: 1px solid var(--border); background: var(--field); color: var(--muted); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    #dir-long.active  { background: rgba(34,197,94,.15); border-color: var(--green); color: var(--green); }
+    #dir-short.active { background: rgba(239,68,68,.13);  border-color: var(--red);  color: var(--red); }
+
+    /* Results */
+    .results { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .result { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 12px; }
     .result.full { grid-column: 1 / -1; }
     .rlabel { font-size: 0.62rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
-    .rvalue {
-      font-size: 1.9rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      line-height: 1.1;
-    }
-    .result.full .rvalue { font-size: 1.5rem; }
+    .rval { font-size: 1.9rem; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.1; }
+    .result.full .rval { font-size: 1.5rem; }
     .rsub { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
 
-    /* ── Panic ── */
-    .panic {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .panic-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+    /* Panic */
+    .panic { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+    .panic-top { display: flex; align-items: center; justify-content: space-between; }
     .panic-top span { font-size: 0.63rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
-    .panic-top input {
-      width: 110px;
-      text-align: right;
-      background: var(--field);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 0.95rem;
-      font-weight: 600;
-      padding: 7px 10px;
-      outline: none;
-      -moz-appearance: textfield;
-    }
-    .panic-top input::-webkit-inner-spin-button,
-    .panic-top input::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .panic-top input:focus { border-color: var(--accent); }
+    .panic-top input { width: 120px; }
     .bartrack { height: 6px; background: var(--field); border-radius: 99px; overflow: hidden; }
-    .barfill  { height: 100%; border-radius: 99px; transition: width .4s, background .3s; }
-    .sbox {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 12px;
-      border-radius: 8px;
-      font-size: 0.83rem;
-      font-weight: 600;
-      border: 1px solid transparent;
-    }
+    .barfill  { height: 100%; border-radius: 99px; width: 100%; background: var(--green); transition: width .4s, background .3s; }
+    .sbox { display: flex; align-items: center; gap: 8px; padding: 11px 12px; border-radius: 8px; font-size: 0.83rem; font-weight: 600; border: 1px solid transparent; }
     .sdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .sbox.ok     { background: rgba(34,197,94,.08);  border-color: rgba(34,197,94,.3);  color: var(--green); }
     .sbox.warn   { background: rgba(244,167, 0,.08); border-color: rgba(244,167, 0,.3); color: var(--yellow); }
@@ -205,79 +106,26 @@
     .sbox.warn .sdot { background: var(--yellow); }
     .sbox.danger .sdot { background: var(--red); box-shadow: 0 0 6px var(--red); }
 
-    /* ── Position sizing ── */
-    .sizing-methods {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .method {
-      background: var(--field);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 13px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-    .method-info { flex: 1; min-width: 0; }
-    .method-name { font-size: 0.8rem; color: var(--text); font-weight: 500; }
-    .method-desc { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
-    .method-val {
-      font-size: 1.6rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      color: var(--accent);
-      flex-shrink: 0;
-    }
+    /* Position sizing */
+    .methods { display: flex; flex-direction: column; gap: 8px; }
+    .method { background: var(--field); border: 1px solid var(--border); border-radius: 10px; padding: 13px 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .minfo { flex: 1; min-width: 0; }
+    .mname { font-size: 0.8rem; color: var(--text); font-weight: 500; }
+    .mdesc { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+    .mval  { font-size: 1.6rem; font-weight: 800; color: var(--accent); flex-shrink: 0; }
 
-    .reco {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 18px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
+    .reco { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .reco-left { flex: 1; }
-    .reco-label { font-size: 0.63rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-    .reco-text { font-size: 0.85rem; color: var(--muted); }
-    .reco-num {
-      font-size: 3rem;
-      font-weight: 800;
-      font-variant-numeric: tabular-nums;
-      color: var(--green);
-      line-height: 1;
-      flex-shrink: 0;
-    }
+    .reco-lbl { font-size: 0.63rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+    .reco-txt { font-size: 0.85rem; color: var(--muted); }
+    .reco-num { font-size: 3rem; font-weight: 800; line-height: 1; flex-shrink: 0; }
     .reco-unit { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
 
-    /* colour helpers */
     .cg { color: var(--green); }
     .cy { color: var(--yellow); }
     .cr { color: var(--red); }
-    .ca { color: var(--accent); }
 
-    /* ── Kauf/Verkauf Toggle ── */
-    .dir-btn {
-      padding: 10px;
-      border-radius: 9px;
-      font-size: 0.88rem;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      background: var(--field);
-      color: var(--muted);
-      cursor: pointer;
-      transition: background .15s, color .15s, border-color .15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    #dir-long.active  { background: rgba(34,197,94,.15); border-color: var(--green); color: var(--green); }
-    #dir-short.active { background: rgba(239,68,68,.13); border-color: var(--red);   color: var(--red); }
-
-    footer { font-size: 0.67rem; color: var(--muted); text-align: center; margin-top: 6px; }
+    footer { font-size: 0.67rem; color: var(--muted); text-align: center; margin-top: 4px; }
   </style>
 </head>
 <body>
@@ -286,61 +134,60 @@
 
 <div class="wrap">
 
-  <!-- ── Stammdaten (immer sichtbar) ── -->
+  <!-- Stammdaten -->
   <div class="card">
     <div class="clabel">Konto &amp; Markt</div>
     <div class="fields">
 
       <div class="field">
         <div class="flabel">Kontostand <small>Eigenkapital in €</small></div>
-        <input type="number" id="balance" value="22000" min="0" step="100" oninput="calcAll()" />
+        <input id="balance" inputmode="decimal" value="22000"
+               oninput="calcAll()" onchange="calcAll()" />
       </div>
 
       <div class="field">
         <div class="flabel">EUR/USD Kurs <small>aktuell</small></div>
-        <input type="number" id="fx" value="1.16180" min="0.5" step="0.00001" oninput="calcAll()" />
+        <input id="fx" inputmode="decimal" value="1.16180"
+               oninput="calcAll()" onchange="calcAll()" />
       </div>
 
       <div class="field">
         <div class="flabel">Mindesteinschuss / Kt. <small>Maintenance Margin in $</small></div>
-        <input type="number" id="maint" value="3181.06" min="0" step="0.01" oninput="calcAll()" />
+        <input id="maint" inputmode="decimal" value="3181.06"
+               oninput="calcAll()" onchange="calcAll()" />
       </div>
 
     </div>
   </div>
 
-  <!-- ── Tabs ── -->
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" id="tab-safety"   onclick="switchTab('safety')">Sicherheits-Check</button>
     <button class="tab"        id="tab-position" onclick="switchTab('position')">Positionsgröße</button>
   </div>
 
-  <!-- ══════════════════════════════════
-       TAB 1 — Sicherheits-Check
-  ══════════════════════════════════ -->
+  <!-- TAB 1: Sicherheits-Check -->
   <div class="panel active" id="panel-safety">
 
     <div class="card">
       <div class="clabel">Trade-Eingaben</div>
 
-      <!-- Kauf / Verkauf Toggle -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;">
+      <div class="dir-grid">
         <button class="dir-btn active" id="dir-long"  onclick="setDir('long')">▲ Kauf (Long)</button>
         <button class="dir-btn"        id="dir-short" onclick="setDir('short')">▼ Verkauf (Short)</button>
       </div>
 
       <div class="fields">
-
         <div class="field">
           <div class="flabel">Kontrakte <small>Anzahl 6E</small></div>
-          <input type="number" id="s-contracts" value="5" min="1" step="1" oninput="calcSafety()" />
+          <input id="s-contracts" inputmode="numeric" value="5"
+                 oninput="calcSafety()" onchange="calcSafety()" />
         </div>
-
         <div class="field">
           <div class="flabel">Einstiegskurs <small>EUR/USD</small></div>
-          <input type="number" id="s-entry" value="1.16180" min="0.5" step="0.00001" oninput="calcSafety()" />
+          <input id="s-entry" inputmode="decimal" value="1.16180"
+                 oninput="calcSafety()" onchange="calcSafety()" />
         </div>
-
       </div>
     </div>
 
@@ -348,17 +195,17 @@
     <div class="results">
       <div class="result">
         <div class="rlabel">Puffer</div>
-        <div class="rvalue" id="s-buf-eur">–</div>
+        <div class="rval" id="s-buf-eur">–</div>
         <div class="rsub">Euro</div>
       </div>
       <div class="result">
         <div class="rlabel">Puffer</div>
-        <div class="rvalue" id="s-buf-pips">–</div>
+        <div class="rval" id="s-buf-pips">–</div>
         <div class="rsub">Pips</div>
       </div>
       <div class="result full">
         <div class="rlabel">Kurs bis Zwangsliquidierung</div>
-        <div class="rvalue cr" id="s-liq">–</div>
+        <div class="rval cr" id="s-liq">–</div>
         <div class="rsub" id="s-liq-sub">–</div>
       </div>
     </div>
@@ -367,7 +214,8 @@
     <div class="panic">
       <div class="panic-top">
         <span>Alarm-Grenze €</span>
-        <input type="number" id="thresh" value="2000" min="0" step="100" oninput="calcSafety()" />
+        <input id="thresh" inputmode="numeric" value="2000"
+               oninput="calcSafety()" onchange="calcSafety()" />
       </div>
       <div class="bartrack"><div class="barfill" id="bar"></div></div>
       <div class="sbox ok" id="sbox">
@@ -376,12 +224,9 @@
       </div>
     </div>
 
-  </div><!-- /panel-safety -->
+  </div>
 
-
-  <!-- ══════════════════════════════════
-       TAB 2 — Positionsgröße
-  ══════════════════════════════════ -->
+  <!-- TAB 2: Positionsgröße -->
   <div class="panel" id="panel-position">
 
     <div class="card">
@@ -389,201 +234,192 @@
       <div class="fields">
 
         <div class="field">
-          <div class="flabel">Mindest-Puffer <small>Pip-Abstand bis Margin-Call</small></div>
-          <input type="number" id="p-minpips" value="200" min="10" step="10" oninput="calcPosition()" />
+          <div class="flabel">Mindest-Puffer <small>Pips bis Margin-Call</small></div>
+          <input id="p-minpips" inputmode="numeric" value="200"
+                 oninput="calcPosition()" onchange="calcPosition()" />
         </div>
 
         <div class="field">
           <div class="flabel">Max. Verlust / Trade <small>% des Kontos</small></div>
-          <input type="number" id="p-risk" value="5" min="0.1" max="100" step="0.5" oninput="calcPosition()" />
+          <input id="p-risk" inputmode="decimal" value="5"
+                 oninput="calcPosition()" onchange="calcPosition()" />
         </div>
 
         <div class="field">
           <div class="flabel">Stop-Loss Abstand <small>Pips (geplant)</small></div>
-          <input type="number" id="p-stoppips" value="30" min="1" step="1" oninput="calcPosition()" />
+          <input id="p-stoppips" inputmode="numeric" value="30"
+                 oninput="calcPosition()" onchange="calcPosition()" />
         </div>
 
       </div>
     </div>
 
-    <!-- Methoden-Vergleich -->
     <div class="card">
       <div class="clabel">Berechnung</div>
-      <div class="sizing-methods">
+      <div class="methods">
 
         <div class="method">
-          <div class="method-info">
-            <div class="method-name">Sicherheitsmethode</div>
-            <div class="method-desc">Kontrakte, damit Puffer ≥ <span id="p-minpips-label">200</span> Pips bleibt</div>
+          <div class="minfo">
+            <div class="mname">Sicherheitsmethode</div>
+            <div class="mdesc">Puffer bleibt ≥ <span id="lbl-minpips">200</span> Pips</div>
           </div>
-          <div class="method-val" id="p-val-safety">–</div>
+          <div class="mval" id="p-val-safety">–</div>
         </div>
 
         <div class="method">
-          <div class="method-info">
-            <div class="method-name">Risiko-Methode</div>
-            <div class="method-desc">Max. <span id="p-risk-label">5</span> % Verlust bei <span id="p-stop-label">30</span> Pip Stop-Loss</div>
+          <div class="minfo">
+            <div class="mname">Risiko-Methode</div>
+            <div class="mdesc">Max. <span id="lbl-risk">5</span> % bei <span id="lbl-stop">30</span> Pip Stop</div>
           </div>
-          <div class="method-val" id="p-val-risk">–</div>
+          <div class="mval" id="p-val-risk">–</div>
         </div>
 
       </div>
     </div>
 
-    <!-- Empfehlung -->
     <div class="reco">
       <div class="reco-left">
-        <div class="reco-label">Empfehlung</div>
-        <div class="reco-text" id="p-reco-text">–</div>
+        <div class="reco-lbl">Empfehlung</div>
+        <div class="reco-txt" id="p-reco-text">–</div>
       </div>
       <div>
-        <div class="reco-num" id="p-reco-num">–</div>
+        <div class="reco-num cg" id="p-reco-num">–</div>
         <div class="reco-unit">Kontrakte</div>
       </div>
     </div>
 
-  </div><!-- /panel-position -->
+  </div>
 
-</div><!-- /wrap -->
+</div>
 
-<footer>
-  1 Pip = 0,0001 · $12,50 pro Kontrakt · 125.000 EUR Kontraktgröße · Keine Anlageberatung
-</footer>
+<footer>1 Pip = 0,0001 · $12,50 pro Kontrakt · 125.000 EUR Kontraktgröße · Keine Anlageberatung</footer>
 
 <script>
-  const el = id => document.getElementById(id);
+  // ── Helpers ──────────────────────────────────────────────
+  function g(id) { return document.getElementById(id); }
 
-  const f = (n, d = 0) =>
-    isFinite(n) ? n.toLocaleString('de-DE', { minimumFractionDigits: d, maximumFractionDigits: d }) : '–';
-
-  // ── Tab switching ──
-  function switchTab(name) {
-    ['safety','position'].forEach(t => {
-      el('tab-' + t).classList.toggle('active', t === name);
-      el('panel-' + t).classList.toggle('active', t === name);
-    });
+  // Parse: handles both "1.16" and "1,16" as decimal input
+  function p(id) {
+    var v = g(id).value.trim().replace(',', '.');
+    var n = parseFloat(v);
+    return isNaN(n) ? 0 : n;
   }
 
-  // ── Richtung (Long / Short) ──
-  let direction = 'long';
+  // Format: German style, fixed decimals
+  function fmt(n, dec) {
+    if (!isFinite(n)) return '–';
+    dec = dec || 0;
+    var s = Math.abs(n).toFixed(dec);
+    var parts = s.split('.');
+    // thousands separator
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    var str = dec > 0 ? parts[0] + ',' + parts[1] : parts[0];
+    return n < 0 ? '−' + str : str;
+  }
+
+  // ── State ─────────────────────────────────────────────────
+  var dir = 'long';
+
   function setDir(d) {
-    direction = d;
-    el('dir-long').classList.toggle('active', d === 'long');
-    el('dir-short').classList.toggle('active', d === 'short');
+    dir = d;
+    g('dir-long').classList.toggle('active',  d === 'long');
+    g('dir-short').classList.toggle('active', d === 'short');
     calcSafety();
   }
 
-  // ── Shared inputs ──
-  function shared() {
-    return {
-      bal:   +el('balance').value || 0,
-      fx:    +el('fx').value      || 1,
-      maint: +el('maint').value   || 0,
-    };
+  function switchTab(name) {
+    ['safety', 'position'].forEach(function(t) {
+      g('tab-'   + t).classList.toggle('active', t === name);
+      g('panel-' + t).classList.toggle('active', t === name);
+    });
   }
 
-  // ── Tab 1: Sicherheits-Check ──
+  // ── Safety Check ──────────────────────────────────────────
   function calcSafety() {
-    const { bal, fx, maint } = shared();
-    const n      = +el('s-contracts').value || 0;
-    const entry  = +el('s-entry').value     || fx;
-    const thresh = +el('thresh').value      || 0;
+    var bal   = p('balance');
+    var fx    = p('fx')    || 1;
+    var maint = p('maint');
+    var n     = p('s-contracts') || 1;
+    var entry = p('s-entry') || fx;
+    var thr   = p('thresh');
 
-    const maintEur = (n * maint) / fx;           // Mindesteinschuss gesamt in €
-    const bufEur   = bal - maintEur;              // Puffer in €
-    const pipEur   = (12.50 / fx) * n;           // € pro Pip (alle Kontrakte)
-    const bufPips  = pipEur > 0 ? bufEur / pipEur : 0;
-
-    // Long: Kurs fällt → Liquidierung unterhalb Einstieg
-    // Short: Kurs steigt → Liquidierung oberhalb Einstieg
-    const liqPrice = direction === 'long'
-      ? entry - bufPips * 0.0001
-      : entry + bufPips * 0.0001;
+    var maintEur = (n * maint) / fx;
+    var bufEur   = bal - maintEur;
+    var pipEur   = (12.50 / fx) * n;
+    var bufPips  = pipEur > 0 ? bufEur / pipEur : 0;
+    var liq      = dir === 'long'
+                   ? entry - bufPips * 0.0001
+                   : entry + bufPips * 0.0001;
 
     // Puffer €
-    const eurEl = el('s-buf-eur');
-    eurEl.textContent = f(bufEur) + ' €';
-    eurEl.className = 'rvalue ' + (bufEur <= thresh ? 'cr' : bufEur <= thresh * 1.5 ? 'cy' : 'cg');
+    var eEl = g('s-buf-eur');
+    eEl.textContent = fmt(bufEur) + ' €';
+    eEl.className = 'rval ' + (bufEur <= thr ? 'cr' : bufEur <= thr * 1.5 ? 'cy' : 'cg');
 
     // Puffer Pips
-    const pipsEl = el('s-buf-pips');
-    pipsEl.textContent = f(bufPips, 1);
-    pipsEl.className = 'rvalue ' + (bufPips <= 50 ? 'cr' : bufPips <= 100 ? 'cy' : 'cg');
+    var pEl = g('s-buf-pips');
+    pEl.textContent = fmt(bufPips, 1);
+    pEl.className = 'rval ' + (bufPips <= 50 ? 'cr' : bufPips <= 100 ? 'cy' : 'cg');
 
-    // Liquidierungskurs
-    const arrow = direction === 'long' ? '↓' : '↑';
-    el('s-liq').textContent = f(liqPrice, 5);
-    el('s-liq-sub').textContent =
-      `Einstieg ${f(entry, 5)}  ${arrow}  ${f(bufPips, 1)} Pips`;
+    // Liq-Kurs
+    var arrow = dir === 'long' ? '↓' : '↑';
+    g('s-liq').textContent = fmt(liq, 5);
+    g('s-liq-sub').textContent = 'Einstieg ' + fmt(entry, 5) + '  ' + arrow + '  ' + fmt(bufPips, 1) + ' Pips';
 
     // Panic bar
-    const ratio = thresh > 0 ? Math.min(bufEur / (thresh * 3), 1) : 1;
-    el('bar').style.width = Math.max(0, ratio * 100) + '%';
-    const box = el('sbox');
+    var ratio = thr > 0 ? Math.min(bufEur / (thr * 3), 1) : 1;
+    g('bar').style.width = Math.max(0, ratio * 100) + '%';
 
-    if (bufEur <= thresh) {
-      el('bar').style.background = 'var(--red)';
+    var box = g('sbox');
+    if (bufEur <= thr) {
+      g('bar').style.background = 'var(--red)';
       box.className = 'sbox danger';
-      el('sbox-text').textContent =
-        `STOP — Puffer ${f(bufEur)} € ≤ Grenze ${f(thresh)} € → Position reduzieren!`;
-    } else if (bufEur <= thresh * 1.5) {
-      el('bar').style.background = 'var(--yellow)';
+      g('sbox-text').textContent = 'STOP — Puffer ' + fmt(bufEur) + ' € ≤ Grenze ' + fmt(thr) + ' € → Position reduzieren!';
+    } else if (thr > 0 && bufEur <= thr * 1.5) {
+      g('bar').style.background = 'var(--yellow)';
       box.className = 'sbox warn';
-      el('sbox-text').textContent =
-        `Achtung — Puffer ${f(bufEur)} € nähert sich Grenze ${f(thresh)} €`;
+      g('sbox-text').textContent = 'Achtung — Puffer ' + fmt(bufEur) + ' € nähert sich Grenze ' + fmt(thr) + ' €';
     } else {
-      el('bar').style.background = 'var(--green)';
+      g('bar').style.background = 'var(--green)';
       box.className = 'sbox ok';
-      el('sbox-text').textContent =
-        `OK — Puffer ${f(bufEur)} € über Grenze ${f(thresh)} €`;
+      g('sbox-text').textContent = 'OK — Puffer ' + fmt(bufEur) + ' € über Grenze ' + fmt(thr) + ' €';
     }
   }
 
-  // ── Tab 2: Positionsgröße ──
+  // ── Position sizing ───────────────────────────────────────
   function calcPosition() {
-    const { bal, fx, maint } = shared();
-    const minPips  = +el('p-minpips').value   || 200;
-    const riskPct  = +el('p-risk').value      || 5;
-    const stopPips = +el('p-stoppips').value  || 30;
+    var bal      = p('balance');
+    var fx       = p('fx')    || 1;
+    var maint    = p('maint');
+    var minPips  = p('p-minpips') || 200;
+    var riskPct  = p('p-risk')    || 5;
+    var stopPips = p('p-stoppips')|| 30;
 
-    // Methode 1: Sicherheitspuffer
-    // n so dass (bal - n*maint/fx) / ((12.50/fx)*n) >= minPips
-    // => n <= bal / ((maint + minPips*12.50) / fx)
-    const nSafety = Math.floor(bal / ((maint + minPips * 12.50) / fx));
+    var nSafety = Math.floor(bal / ((maint + minPips * 12.50) / fx));
+    var nRisk   = Math.floor((bal * riskPct / 100) / (stopPips * 12.50 / fx));
+    var reco    = Math.max(0, Math.min(nSafety, nRisk));
 
-    // Methode 2: Risiko %
-    // Max-Verlust € = bal * riskPct/100
-    // Verlust bei stopPips: n * stopPips * 12.50 / fx
-    // => n <= (bal * riskPct/100) / (stopPips * 12.50 / fx)
-    const maxLossEur = bal * (riskPct / 100);
-    const nRisk = Math.floor(maxLossEur / (stopPips * 12.50 / fx));
+    g('lbl-minpips').textContent = fmt(minPips);
+    g('lbl-risk').textContent    = fmt(riskPct, 1);
+    g('lbl-stop').textContent    = fmt(stopPips);
 
-    // Empfehlung = niedrigster (konservativer) Wert ≥ 1
-    const reco = Math.max(0, Math.min(nSafety, nRisk));
-
-    el('p-minpips-label').textContent = f(minPips);
-    el('p-risk-label').textContent    = f(riskPct, 1);
-    el('p-stop-label').textContent    = f(stopPips);
-
-    el('p-val-safety').textContent = nSafety >= 1 ? nSafety : '0';
-    el('p-val-risk').textContent   = nRisk   >= 1 ? nRisk   : '0';
-
-    el('p-reco-num').textContent  = reco >= 1 ? reco : '0';
-    el('p-reco-num').className    = 'reco-num ' + (reco >= 1 ? 'cg' : 'cr');
+    g('p-val-safety').textContent = nSafety >= 1 ? nSafety : '0';
+    g('p-val-risk').textContent   = nRisk   >= 1 ? nRisk   : '0';
+    g('p-reco-num').textContent   = reco >= 1 ? reco : '0';
+    g('p-reco-num').className     = 'reco-num ' + (reco >= 1 ? 'cg' : 'cr');
 
     if (reco === 0) {
-      el('p-reco-text').textContent = 'Kapital zu gering für einen Kontrakt mit diesen Parametern';
+      g('p-reco-text').textContent = 'Kapital zu gering für diese Parameter';
     } else if (nSafety <= nRisk) {
-      el('p-reco-text').textContent =
-        `Limitiert durch Sicherheitspuffer (${f(minPips)} Pip Mindest-Abstand)`;
+      g('p-reco-text').textContent = 'Limitiert durch Pip-Puffer (' + fmt(minPips) + ' Pips Mindest-Abstand)';
     } else {
-      el('p-reco-text').textContent =
-        `Limitiert durch Risikolimit (${f(riskPct,1)} % bei ${f(stopPips)} Pip Stop)`;
+      g('p-reco-text').textContent = 'Limitiert durch Risikolimit (' + fmt(riskPct,1) + '% bei ' + fmt(stopPips) + ' Pip Stop)';
     }
   }
 
   function calcAll() { calcSafety(); calcPosition(); }
 
+  // Initial calculation
   calcAll();
 </script>
 </body>
