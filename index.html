@@ -3,445 +3,368 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futures Safety Rechner – 6E</title>
+  <title>6E Safety Rechner</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0d0f18;
-      --card:      #161926;
-      --input-bg:  #1e2235;
-      --border:    #272d45;
-      --accent:    #5b8dee;
-      --green:     #22c55e;
-      --yellow:    #f59e0b;
-      --red:       #ef4444;
-      --text:      #e2e6f3;
-      --muted:     #626a8a;
-      --radius:    14px;
-      --radius-sm: 9px;
+      --bg:     #0d0f18;
+      --card:   #161926;
+      --field:  #1c2033;
+      --border: #252b42;
+      --accent: #5b8dee;
+      --green:  #22c55e;
+      --yellow: #f4a700;
+      --red:    #ef4444;
+      --text:   #dde2f0;
+      --muted:  #5c6480;
+      --r:      12px;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: var(--bg);
       color: var(--text);
-      min-height: 100vh;
-      padding: 24px 16px 60px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 56px;
+      gap: 14px;
     }
 
     /* ── Header ── */
-    header {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 24px;
-    }
-    header h1 {
-      font-size: 1.2rem;
+    h1 {
+      font-size: 1.05rem;
       font-weight: 700;
       color: var(--text);
+      align-self: flex-start;
     }
-    header span {
-      font-size: 0.8rem;
+    h1 small {
+      font-size: 0.78rem;
+      font-weight: 400;
       color: var(--muted);
+      margin-left: 6px;
     }
 
-    /* ── Layout ── */
-    .stack {
-      max-width: 480px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    /* ── Wrapper ── */
+    .wrap { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 14px; }
 
-    /* ── Card ── */
+    /* ── Inputs card ── */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
+      border-radius: var(--r);
+      padding: 18px 16px;
     }
-    .card-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.09em;
+    .section-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 14px;
     }
 
-    /* ── Inputs ── */
-    .inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    .fields { display: flex; flex-direction: column; gap: 0; }
+    .field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--border);
+      gap: 12px;
     }
-    .field label {
+    .field:last-child { border-bottom: none; padding-bottom: 0; }
+    .field:first-child { padding-top: 0; }
+    .field-label {
+      font-size: 0.88rem;
+      color: var(--text);
+      flex: 1;
+    }
+    .field-label small {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--muted);
-      margin-bottom: 5px;
+      margin-top: 1px;
     }
     .field input {
-      width: 100%;
-      background: var(--input-bg);
+      width: 130px;
+      text-align: right;
+      background: var(--field);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 8px;
       color: var(--text);
-      font-size: 0.95rem;
-      font-weight: 500;
-      padding: 9px 11px;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 8px 10px;
       outline: none;
       -moz-appearance: textfield;
       transition: border-color 0.15s;
+      flex-shrink: 0;
     }
-    .field input::-webkit-outer-spin-button,
-    .field input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .field input::-webkit-inner-spin-button,
+    .field input::-webkit-outer-spin-button { -webkit-appearance: none; }
     .field input:focus { border-color: var(--accent); }
 
-    /* ── Hero outputs ── */
-    .heroes {
+    /* ── Results ── */
+    .results {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .hero {
-      background: var(--input-bg);
+    .result {
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px;
-      text-align: center;
+      border-radius: var(--r);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
-    .hero.full { grid-column: 1 / -1; }
-    .hero-label {
-      font-size: 0.7rem;
-      color: var(--muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-    .hero-value {
-      font-size: 1.6rem;
+    .result.full { grid-column: 1 / -1; }
+    .result-label {
+      font-size: 0.65rem;
       font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      line-height: 1;
-    }
-    .hero-value.big { font-size: 2rem; }
-    .hero-sub {
-      font-size: 0.72rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
       color: var(--muted);
-      margin-top: 5px;
     }
+    .result-value {
+      font-size: 2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.1;
+    }
+    .result.full .result-value { font-size: 1.6rem; }
+    .result-sub { font-size: 0.72rem; color: var(--muted); }
 
     /* ── Panic ── */
-    .panic-row {
+    .panic-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .panic-top {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      justify-content: space-between;
     }
-    .panic-row label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; }
-    .panic-row input {
+    .panic-top span { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .panic-top input {
       width: 110px;
-      background: var(--input-bg);
+      text-align: right;
+      background: var(--field);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
+      border-radius: 8px;
       color: var(--text);
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 0.95rem;
+      font-weight: 600;
       padding: 7px 10px;
       outline: none;
       -moz-appearance: textfield;
     }
-    .panic-row input::-webkit-outer-spin-button,
-    .panic-row input::-webkit-inner-spin-button { -webkit-appearance: none; }
-    .panic-row input:focus { border-color: var(--accent); }
+    .panic-top input::-webkit-inner-spin-button,
+    .panic-top input::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .panic-top input:focus { border-color: var(--accent); }
 
-    .bar-wrap { height: 8px; background: var(--input-bg); border-radius: 99px; overflow: hidden; margin-bottom: 10px; }
-    .bar { height: 100%; border-radius: 99px; transition: width .4s, background .3s; }
+    .bar-track { height: 6px; background: var(--field); border-radius: 99px; overflow: hidden; }
+    .bar-fill  { height: 100%; border-radius: 99px; transition: width .4s, background .3s; }
 
-    .status-box {
+    .status {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.88rem;
+      gap: 9px;
+      padding: 11px 13px;
+      border-radius: 9px;
+      font-size: 0.85rem;
       font-weight: 600;
       border: 1px solid transparent;
     }
-    .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-    .status-box.ok     { background: rgba(34,197,94,.1);  border-color: var(--green);  color: var(--green); }
-    .status-box.warn   { background: rgba(245,158,11,.1); border-color: var(--yellow); color: var(--yellow); }
-    .status-box.danger { background: rgba(239,68,68,.12); border-color: var(--red);    color: var(--red); }
-    .status-box.ok   .dot { background: var(--green); }
-    .status-box.warn .dot { background: var(--yellow); }
-    .status-box.danger .dot { background: var(--red); box-shadow: 0 0 5px var(--red); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ── Detail rows ── */
-    .rows { display: flex; flex-direction: column; }
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      font-size: 0.88rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .row:last-child { border-bottom: none; padding-bottom: 0; }
-    .row:first-child { padding-top: 0; }
-    .row-label { color: var(--muted); }
-    .row-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+    .ok     { background: rgba(34,197,94,.08);  border-color: rgba(34,197,94,.35);  color: var(--green); }
+    .warn   { background: rgba(244,167, 0,.08); border-color: rgba(244,167, 0,.35); color: var(--yellow); }
+    .danger { background: rgba(239, 68,68,.10); border-color: rgba(239, 68,68,.35); color: var(--red); }
+    .ok   .dot { background: var(--green); }
+    .warn .dot { background: var(--yellow); }
+    .danger .dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
 
-    /* colours */
-    .g { color: var(--green); }
-    .y { color: var(--yellow); }
-    .r { color: var(--red); }
-    .a { color: var(--accent); }
+    /* colour helpers */
+    .c-green  { color: var(--green); }
+    .c-yellow { color: var(--yellow); }
+    .c-red    { color: var(--red); }
+    .c-accent { color: var(--accent); }
 
-    /* ── Pips badge ── */
-    .badge {
-      display: none;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 99px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-    .badge.warn   { background: rgba(245,158,11,.15); color: var(--yellow); }
-    .badge.danger { background: rgba(239,68,68,.15);  color: var(--red); }
-
-    footer {
-      text-align: center;
-      margin-top: 32px;
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
+    footer { font-size: 0.68rem; color: var(--muted); text-align: center; margin-top: 4px; }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Futures Safety Rechner</h1>
-  <span>6E · EUR/USD · CME</span>
-</header>
+<h1>6E Safety Rechner <small>EUR/USD · CME</small></h1>
 
-<div class="stack">
+<div class="wrap">
 
-  <!-- ① Inputs -->
+  <!-- ① Eingaben -->
   <div class="card">
-    <div class="card-label">Eingaben</div>
-    <div class="inputs">
+    <div class="section-label">Eingaben</div>
+    <div class="fields">
 
       <div class="field">
-        <label>Kontostand (€)</label>
+        <div class="field-label">
+          Kontostand
+          <small>Eigenkapital in €</small>
+        </div>
         <input type="number" id="balance" value="22000" min="0" step="100" />
       </div>
 
       <div class="field">
-        <label>Kontrakte</label>
+        <div class="field-label">
+          Kontrakte
+          <small>Anzahl 6E-Kontrakte</small>
+        </div>
         <input type="number" id="contracts" value="5" min="1" step="1" />
       </div>
 
       <div class="field">
-        <label>Mindesteinschuss / Kt. ($)</label>
-        <input type="number" id="margin" value="3181.06" min="0" step="0.01" />
+        <div class="field-label">
+          Einstiegskurs
+          <small>EUR/USD</small>
+        </div>
+        <input type="number" id="entry" value="1.16180" min="0.5" step="0.00001" />
       </div>
 
       <div class="field">
-        <label>Ersteinschuss / Kt. ($)</label>
-        <input type="number" id="initmargin" value="3658.22" min="0" step="0.01" />
+        <div class="field-label">
+          Aktueller Kurs
+          <small>EUR/USD (für Margin in €)</small>
+        </div>
+        <input type="number" id="fx" value="1.16180" min="0.5" step="0.00001" />
       </div>
 
       <div class="field">
-        <label>EUR/USD Kurs</label>
-        <input type="number" id="fxrate" value="1.16180" min="0.01" step="0.00001" />
-      </div>
-
-      <div class="field">
-        <label>Einstiegskurs</label>
-        <input type="number" id="entryprice" value="1.16180" min="0.01" step="0.00001" />
-      </div>
-
-      <div class="field">
-        <label>Max. Verlust / Trade (%)</label>
-        <input type="number" id="maxloss" value="5" min="0.1" max="100" step="0.5" />
+        <div class="field-label">
+          Mindesteinschuss / Kt.
+          <small>Maintenance Margin in $</small>
+        </div>
+        <input type="number" id="maint" value="3181.06" min="0" step="0.01" />
       </div>
 
     </div>
   </div>
 
-  <!-- ② Hero outputs -->
-  <div class="card">
-    <div class="card-label">Sicherheitspuffer</div>
-    <div class="heroes">
+  <!-- ② Ergebnisse -->
+  <div class="results">
 
-      <div class="hero">
-        <div class="hero-label">Puffer in €</div>
-        <div class="hero-value big" id="h-buf-eur">–</div>
-        <div class="hero-sub">Kontostand − Mindesteinschuss</div>
-      </div>
-
-      <div class="hero">
-        <div class="hero-label">
-          Puffer in Pips
-          <span class="badge" id="pips-badge"></span>
-        </div>
-        <div class="hero-value big" id="h-buf-pips">–</div>
-        <div class="hero-sub">bis zum Margin Call</div>
-      </div>
-
-      <div class="hero full">
-        <div class="hero-label">Zwangsliquidierungskurs (est.)</div>
-        <div class="hero-value" id="h-liq" style="color:var(--red)">–</div>
-        <div class="hero-sub">Einstiegskurs − (Puffer Pips × 0,0001)</div>
-      </div>
-
+    <div class="result">
+      <div class="result-label">Puffer</div>
+      <div class="result-value" id="r-eur">–</div>
+      <div class="result-sub">Euro</div>
     </div>
+
+    <div class="result">
+      <div class="result-label">Puffer</div>
+      <div class="result-value" id="r-pips">–</div>
+      <div class="result-sub">Pips</div>
+    </div>
+
+    <div class="result full">
+      <div class="result-label">Kurs bis Minus (Zwangsliquidierung)</div>
+      <div class="result-value c-red" id="r-liq">–</div>
+      <div class="result-sub" id="r-liq-sub">–</div>
+    </div>
+
   </div>
 
   <!-- ③ Panic-Button -->
-  <div class="card">
-    <div class="card-label">Panic-Button</div>
-    <div class="panic-row">
-      <label>Alarmgrenze (€)</label>
-      <input type="number" id="threshold" value="2000" min="0" step="100" />
+  <div class="panic-card">
+    <div class="panic-top">
+      <span>Alarm-Grenze €</span>
+      <input type="number" id="thresh" value="2000" min="0" step="100" />
     </div>
-    <div class="bar-wrap"><div class="bar" id="panic-bar"></div></div>
-    <div class="status-box" id="panic-box">
+    <div class="bar-track"><div class="bar-fill" id="bar"></div></div>
+    <div class="status ok" id="status">
       <span class="dot"></span>
-      <span id="panic-text">–</span>
-    </div>
-  </div>
-
-  <!-- ④ Details -->
-  <div class="card">
-    <div class="card-label">Details</div>
-    <div class="rows">
-      <div class="row">
-        <span class="row-label">Mindesteinschuss gesamt</span>
-        <span class="row-val a" id="d-maint">–</span>
-      </div>
-      <div class="row">
-        <span class="row-label">Ersteinschuss gesamt</span>
-        <span class="row-val a" id="d-init">–</span>
-      </div>
-      <div class="row">
-        <span class="row-label">Kapital-Auslastung</span>
-        <span class="row-val" id="d-util">–</span>
-      </div>
-      <div class="row">
-        <span class="row-label">Empf. Kontrakte (≥ 200 Pip)</span>
-        <span class="row-val" id="d-safe">–</span>
-      </div>
-      <div class="row">
-        <span class="row-label">Stop-Loss bei <span id="d-pct-label">5</span> %</span>
-        <span class="row-val y" id="d-stop">–</span>
-      </div>
+      <span id="status-text">–</span>
     </div>
   </div>
 
 </div>
 
 <footer>
-  Tick = 0,00005 · Pip = 0,0001 · $12,50 pro Kontrakt &nbsp;·&nbsp; Keine Anlageberatung.
+  1 Pip = 0,0001 · $12,50 pro Kontrakt · 125.000 EUR Kontraktgröße · Keine Anlageberatung
 </footer>
 
 <script>
-  const $ = id => document.getElementById(id);
+  const el = id => document.getElementById(id);
 
-  function fmt(n, dec = 2) {
-    return isFinite(n) ? n.toLocaleString('de-DE', { minimumFractionDigits: dec, maximumFractionDigits: dec }) : '–';
-  }
+  const f = (n, d = 0) =>
+    isFinite(n) ? n.toLocaleString('de-DE', { minimumFractionDigits: d, maximumFractionDigits: d }) : '–';
 
-  function calculate() {
-    const balance    = +$('balance').value    || 0;
-    const contracts  = +$('contracts').value  || 0;
-    const margin     = +$('margin').value     || 0;
-    const initmargin = +$('initmargin').value || 0;
-    const fxrate     = +$('fxrate').value     || 1;
-    const entryprice = +$('entryprice').value || fxrate;
-    const threshold  = +$('threshold').value  || 0;
-    const maxlossPct = +$('maxloss').value    || 5;
+  function calc() {
+    const bal    = +el('balance').value   || 0;
+    const n      = +el('contracts').value || 0;
+    const entry  = +el('entry').value     || 1;
+    const fx     = +el('fx').value        || 1;
+    const maint  = +el('maint').value     || 0;
+    const thresh = +el('thresh').value    || 0;
 
-    const maintEur   = (contracts * margin) / fxrate;
-    const initEur    = (contracts * initmargin) / fxrate;
-    const bufEur     = balance - maintEur;
-    const pipVal     = (12.50 / fxrate) * contracts;   // € per pip, all contracts
-    const bufPips    = pipVal > 0 ? bufEur / pipVal : 0;
-    const liqPrice   = entryprice - bufPips * 0.0001;
+    // Margin & buffer
+    const maintEur  = (n * maint) / fx;            // Mindesteinschuss gesamt in €
+    const bufEur    = bal - maintEur;               // Puffer in €
+    const pipEur    = (12.50 / fx) * n;             // € pro Pip (alle Kontrakte)
+    const bufPips   = pipEur > 0 ? bufEur / pipEur : 0;
+    const liqPrice  = entry - bufPips * 0.0001;     // Liquidierungskurs
 
-    const stopEur    = balance * (maxlossPct / 100);
-    const stopPips   = pipVal > 0 ? stopEur / pipVal : 0;
+    // Puffer €
+    const eurEl = el('r-eur');
+    eurEl.textContent = f(bufEur) + ' €';
+    eurEl.className = 'result-value ' +
+      (bufEur <= thresh ? 'c-red' : bufEur <= thresh * 1.5 ? 'c-yellow' : 'c-green');
 
-    const utilPct    = balance > 0 ? (maintEur / balance) * 100 : 0;
+    // Puffer Pips
+    const pipsEl = el('r-pips');
+    pipsEl.textContent = f(bufPips, 1);
+    pipsEl.className = 'result-value ' +
+      (bufPips <= 50 ? 'c-red' : bufPips <= 100 ? 'c-yellow' : 'c-green');
 
-    const safeByPips = Math.floor(balance / ((margin + 200 * 12.50) / fxrate));
-    const safeByInit = Math.floor(balance / (initmargin / fxrate));
-    const safe       = Math.min(safeByPips, safeByInit);
+    // Liquidierungskurs
+    el('r-liq').textContent = f(liqPrice, 5);
+    el('r-liq-sub').textContent =
+      `Einstieg ${f(entry,5)} − ${f(bufPips,1)} Pips`;
 
-    // ── Hero: Puffer €
-    const bufEurEl = $('h-buf-eur');
-    bufEurEl.textContent = fmt(bufEur, 0) + ' €';
-    bufEurEl.className = 'hero-value big ' + (bufEur <= threshold ? 'r' : bufEur <= threshold * 1.5 ? 'y' : 'g');
+    // Panic bar
+    const ratio = thresh > 0 ? Math.min(bufEur / (thresh * 3), 1) : 1;
+    const bar   = el('bar');
+    const box   = el('status');
+    bar.style.width = Math.max(0, ratio * 100) + '%';
 
-    // ── Hero: Puffer Pips
-    const bufPipsEl = $('h-buf-pips');
-    bufPipsEl.textContent = fmt(bufPips, 1);
-    bufPipsEl.className = 'hero-value big ' + (bufPips <= 50 ? 'r' : bufPips <= 100 ? 'y' : 'g');
-
-    const badge = $('pips-badge');
-    if (bufPips <= 50)       { badge.textContent = 'KRITISCH'; badge.className = 'badge danger'; badge.style.display = 'inline'; }
-    else if (bufPips <= 100) { badge.textContent = 'NIEDRIG';  badge.className = 'badge warn';   badge.style.display = 'inline'; }
-    else                     { badge.style.display = 'none'; }
-
-    // ── Hero: Liq price
-    $('h-liq').textContent = fmt(liqPrice, 5);
-
-    // ── Panic bar
-    const ratio  = threshold > 0 ? Math.min(bufEur / (threshold * 3), 1) : 1;
-    const pct    = Math.max(0, Math.round(ratio * 100));
-    const bar    = $('panic-bar');
-    const box    = $('panic-box');
-    bar.style.width = pct + '%';
-
-    if (bufEur <= threshold) {
+    if (bufEur <= thresh) {
       bar.style.background = 'var(--red)';
-      box.className = 'status-box danger';
-      $('panic-text').textContent = `PANIC! Puffer ${fmt(bufEur,0)} € ≤ Grenze ${fmt(threshold,0)} € — Position reduzieren!`;
-    } else if (bufEur <= threshold * 1.5) {
+      box.className = 'status danger';
+      el('status-text').textContent =
+        `STOP — Puffer ${f(bufEur)} € ≤ Grenze ${f(thresh)} € → Position reduzieren!`;
+    } else if (bufEur <= thresh * 1.5) {
       bar.style.background = 'var(--yellow)';
-      box.className = 'status-box warn';
-      $('panic-text').textContent = `Achtung: Puffer ${fmt(bufEur,0)} € nähert sich der Grenze ${fmt(threshold,0)} €`;
+      box.className = 'status warn';
+      el('status-text').textContent =
+        `Achtung — Puffer ${f(bufEur)} € nähert sich der Grenze ${f(thresh)} €`;
     } else {
       bar.style.background = 'var(--green)';
-      box.className = 'status-box ok';
-      $('panic-text').textContent = `Sicher — Puffer ${fmt(bufEur,0)} € über Grenze ${fmt(threshold,0)} €`;
+      box.className = 'status ok';
+      el('status-text').textContent =
+        `OK — Puffer ${f(bufEur)} € über Grenze ${f(thresh)} €`;
     }
-
-    // ── Details
-    $('d-maint').textContent = fmt(maintEur, 0) + ' €';
-    $('d-init').textContent  = fmt(initEur,  0) + ' €';
-
-    const utilEl = $('d-util');
-    utilEl.textContent  = fmt(utilPct, 1) + ' %';
-    utilEl.className    = 'row-val ' + (utilPct > 80 ? 'r' : utilPct > 60 ? 'y' : 'g');
-
-    const safeEl = $('d-safe');
-    safeEl.textContent = safe >= 1 ? safe + ' Kontrakte' : '< 1';
-    safeEl.className   = 'row-val ' + (safe >= contracts ? 'g' : 'y');
-
-    $('d-pct-label').textContent = maxlossPct;
-    $('d-stop').textContent = fmt(stopEur, 0) + ' € / ' + fmt(stopPips, 1) + ' Pip';
   }
 
-  ['balance','contracts','margin','initmargin','fxrate','entryprice','threshold','maxloss']
-    .forEach(id => $(id).addEventListener('input', calculate));
+  ['balance','contracts','entry','fx','maint','thresh']
+    .forEach(id => el(id).addEventListener('input', calc));
 
-  calculate();
+  calc();
 </script>
 </body>
 </html>
