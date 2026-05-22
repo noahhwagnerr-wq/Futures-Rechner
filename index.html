@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Futures Safety Rechner – 6E (EUR/USD)</title>
+  <title>Futures Safety Rechner – 6E EUR/USD · Jun15'26</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -272,18 +272,53 @@
 
 <header>
   <h1>Futures Safety Rechner</h1>
-  <p>6E · EUR/USD · CME Globex &nbsp;|&nbsp; Tick = 0,00005 · Pip = 0,0001 · $12,50 / Kontrakt</p>
+  <p>6E · EUR/USD · CME Globex · Jun15'26 · 125.000 EUR/Kontrakt &nbsp;|&nbsp; Tick = 0,00005 · Pip = 0,0001 · $12,50 / Kontrakt</p>
 </header>
 
 <div class="layout">
 
+  <!-- ── IBKR Live-Daten Banner ── -->
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;">
+    <div style="font-size:0.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;flex-basis:100%">
+      IBKR Snapshot · EUR ∞ Jun15'26(125.000) CME · Stand 22.05.2026
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:24px;width:100%">
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Kurs (Bid)</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--text)">1,16180</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Kurs (Ask)</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--text)">1,16185</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Spread</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--text)">0,00005 (1 Tick)</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Ersteinschuss / Kontrakt</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--accent)">3.658,22 $</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--text-muted)">Mindesteinschuss / Kontrakt</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--accent)">3.181,06 $</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── 1. Eingaben ── -->
   <div class="card">
-    <div class="card-title">Eingaben</div>
+    <div class="card-title">Eingaben
+      <span style="float:right;font-weight:400;color:var(--accent);font-size:0.75rem;letter-spacing:0">
+        Quelle: IBKR · 22.05.2026
+      </span>
+    </div>
     <div class="input-grid">
 
       <div class="field">
-        <label>Kontostand aktuell <span class="unit">€</span></label>
+        <label>Kontostand aktuell <span class="unit">€</span>
+          <span style="color:var(--text-muted);font-size:0.72rem">(Eigenkapital / Net Liq)</span>
+        </label>
         <input type="number" id="balance" value="22000" min="0" step="100" />
       </div>
 
@@ -293,23 +328,32 @@
       </div>
 
       <div class="field">
-        <label>Maintenance Margin / Kontrakt <span class="unit">$</span></label>
-        <input type="number" id="margin" value="3000" min="0" step="50" />
+        <label>Mindesteinschuss / Kontrakt <span class="unit">$</span>
+          <span style="color:var(--text-muted);font-size:0.72rem">(Maintenance Margin)</span>
+        </label>
+        <input type="number" id="margin" value="3181.06" min="0" step="0.01" />
+      </div>
+
+      <div class="field">
+        <label>Ersteinschuss / Kontrakt <span class="unit">$</span>
+          <span style="color:var(--text-muted);font-size:0.72rem">(Initial Margin)</span>
+        </label>
+        <input type="number" id="initmargin" value="3658.22" min="0" step="0.01" />
       </div>
 
       <div class="field">
         <label>EUR/USD Kurs <span class="unit">aktuell</span></label>
-        <input type="number" id="fxrate" value="1.16" min="0.01" step="0.001" />
+        <input type="number" id="fxrate" value="1.16180" min="0.01" step="0.00001" />
+      </div>
+
+      <div class="field">
+        <label>Einstiegskurs EUR/USD <span class="unit">für Liquidation</span></label>
+        <input type="number" id="entryprice" value="1.16180" min="0.01" step="0.00001" />
       </div>
 
       <div class="field">
         <label>Max. Verlust pro Trade <span class="unit">%</span></label>
         <input type="number" id="maxloss" value="5" min="0.1" max="100" step="0.5" />
-      </div>
-
-      <div class="field">
-        <label>Einstiegskurs EUR/USD <span class="unit">für Liquidation</span></label>
-        <input type="number" id="entryprice" value="1.16" min="0.01" step="0.0001" />
       </div>
 
     </div>
@@ -321,11 +365,15 @@
     <table class="result-table">
       <tbody>
         <tr>
-          <td>Maintenance Margin gesamt</td>
+          <td>Ersteinschuss gesamt <span style="font-size:0.75rem;color:var(--text-muted)">(Initial Margin)</span></td>
+          <td id="r-initmargin-total" class="clr-accent">–</td>
+        </tr>
+        <tr>
+          <td>Mindesteinschuss gesamt <span style="font-size:0.75rem;color:var(--text-muted)">(Maintenance Margin)</span></td>
           <td id="r-margin-total" class="clr-accent">–</td>
         </tr>
         <tr>
-          <td>Puffer in Euro</td>
+          <td>Puffer über Mindesteinschuss <span style="font-size:0.75rem;color:var(--text-muted)">(Kontostand – Mindest.)</span></td>
           <td id="r-buffer-eur">–</td>
         </tr>
         <tr>
@@ -423,17 +471,19 @@
   }
 
   function calculate() {
-    const balance    = parseFloat($('balance').value)    || 0;
-    const contracts  = parseFloat($('contracts').value)  || 0;
-    const margin     = parseFloat($('margin').value)     || 0;
-    const fxrate     = parseFloat($('fxrate').value)     || 1;
-    const threshold  = parseFloat($('threshold').value)  || 0;
-    const maxlossPct = parseFloat($('maxloss').value)    || 5;
-    const entryprice = parseFloat($('entryprice').value) || fxrate;
+    const balance     = parseFloat($('balance').value)     || 0;
+    const contracts   = parseFloat($('contracts').value)   || 0;
+    const margin      = parseFloat($('margin').value)      || 0;
+    const initmargin  = parseFloat($('initmargin').value)  || 0;
+    const fxrate      = parseFloat($('fxrate').value)      || 1;
+    const threshold   = parseFloat($('threshold').value)   || 0;
+    const maxlossPct  = parseFloat($('maxloss').value)     || 5;
+    const entryprice  = parseFloat($('entryprice').value)  || fxrate;
 
     // ── Core formulas ──
-    const marginTotalEur = (contracts * margin) / fxrate;
-    const bufferEur      = balance - marginTotalEur;
+    const initMarginTotalEur = (contracts * initmargin) / fxrate;
+    const marginTotalEur     = (contracts * margin) / fxrate;
+    const bufferEur          = balance - marginTotalEur;
     // 1 Pip = 0.0001 EUR/USD = $12.50 per contract (6E)
     // pip value in EUR = 12.50 / fxrate per contract
     const pipValueEur    = (12.50 / fxrate) * contracts;
@@ -445,8 +495,9 @@
     const stopLossPips   = pipValueEur > 0 ? stopLossEur / pipValueEur : 0;
 
     // ── Render results ──
-    $('r-margin-total').textContent = fmt(marginTotalEur, 2) + ' €';
-    $('r-liq-price').textContent    = fmt(liqPrice, 5);
+    $('r-initmargin-total').textContent = fmt(initMarginTotalEur, 2) + ' €';
+    $('r-margin-total').textContent     = fmt(marginTotalEur, 2) + ' €';
+    $('r-liq-price').textContent        = fmt(liqPrice, 5);
 
     const bufEurEl = $('r-buffer-eur');
     bufEurEl.textContent = fmt(bufferEur, 2) + ' €';
@@ -510,20 +561,21 @@
 
     $('rd-max-loss').textContent = fmt(stopLossEur, 0) + ' €';
 
-    // Safe contracts: floor such that buffer pips >= 200
-    // bufferEur_new = balance - (n * margin / fxrate)
-    // pips_new = bufferEur_new / ((12.50 / fxrate) * n) >= 200
-    // => balance - n*margin/fxrate >= 200 * (12.50/fxrate) * n
-    // => balance >= n * (margin/fxrate + 200 * 12.50/fxrate)
-    // => n <= balance / ((margin + 200*12.50) / fxrate)
-    const safeContracts = Math.floor(balance / ((margin + 200 * 12.50) / fxrate));
+    // Safe contracts: largest n so that maintenance-margin buffer >= 200 pips
+    // and initial margin can be funded from balance.
+    // buffer_pips = (balance - n*margin/fx) / ((12.50/fx)*n) >= 200
+    // => n <= balance / ((margin + 200*12.50) / fx)
+    // Also: balance must cover initial margin => n <= balance / (initmargin/fx)
+    const safeByPips   = Math.floor(balance / ((margin + 200 * 12.50) / fxrate));
+    const safeByInit   = Math.floor(balance / (initmargin / fxrate));
+    const safeContracts = Math.min(safeByPips, safeByInit);
     const safeEl = $('rd-safe-contracts');
     safeEl.textContent = safeContracts >= 1 ? safeContracts : '< 1';
     safeEl.className   = 'rm-value ' + (safeContracts >= contracts ? 'clr-green' : 'clr-yellow');
   }
 
   // Attach listeners
-  ['balance','contracts','margin','fxrate','threshold','maxloss','entryprice']
+  ['balance','contracts','margin','initmargin','fxrate','threshold','maxloss','entryprice']
     .forEach(id => $(`${id}`).addEventListener('input', calculate));
 
   calculate();
