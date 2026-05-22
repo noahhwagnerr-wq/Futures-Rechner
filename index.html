@@ -124,6 +124,7 @@
     .cg { color: var(--green); }
     .cy { color: var(--yellow); }
     .cr { color: var(--red); }
+    .ca { color: var(--accent); }
 
     footer { font-size: 0.67rem; color: var(--muted); text-align: center; margin-top: 4px; }
   </style>
@@ -202,6 +203,16 @@
         <div class="rlabel">Puffer</div>
         <div class="rval" id="s-buf-pips">–</div>
         <div class="rsub">Pips</div>
+      </div>
+      <div class="result">
+        <div class="rlabel">Pip-Wert / Kontrakt</div>
+        <div class="rval ca" id="s-pip-per">–</div>
+        <div class="rsub">$12,50 ÷ Kurs</div>
+      </div>
+      <div class="result">
+        <div class="rlabel">Pip-Wert gesamt</div>
+        <div class="rval ca" id="s-pip-total">–</div>
+        <div class="rsub" id="s-pip-total-sub">alle Kontrakte</div>
       </div>
       <div class="result full">
         <div class="rlabel">Kurs bis Zwangsliquidierung</div>
@@ -350,6 +361,13 @@
     var liq      = dir === 'long'
                    ? entry - bufPips * 0.0001
                    : entry + bufPips * 0.0001;
+
+    // Pip-Wert
+    var pipPerCt = 12.50 / fx;           // € pro Pip, 1 Kontrakt
+    var pipTotal = pipPerCt * n;         // € pro Pip, alle Kontrakte
+    g('s-pip-per').textContent   = fmt(pipPerCt, 2) + ' €';
+    g('s-pip-total').textContent = fmt(pipTotal, 2) + ' €';
+    g('s-pip-total-sub').textContent = n + (n === 1 ? ' Kontrakt' : ' Kontrakte');
 
     // Puffer €
     var eEl = g('s-buf-eur');
