@@ -261,6 +261,22 @@
     .cr { color: var(--red); }
     .ca { color: var(--accent); }
 
+    /* ── Kauf/Verkauf Toggle ── */
+    .dir-btn {
+      padding: 10px;
+      border-radius: 9px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--field);
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #dir-long.active  { background: rgba(34,197,94,.15); border-color: var(--green); color: var(--green); }
+    #dir-short.active { background: rgba(239,68,68,.13); border-color: var(--red);   color: var(--red); }
+
     /* ── Berechnen-Button ── */
     .calc-btn {
       width: 100%;
@@ -323,6 +339,13 @@
 
     <div class="card">
       <div class="clabel">Trade-Eingaben</div>
+
+      <!-- Kauf / Verkauf Toggle -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;">
+        <button class="dir-btn active" id="dir-long"  onclick="setDir('long')">▲ Kauf (Long)</button>
+        <button class="dir-btn"        id="dir-short" onclick="setDir('short')">▼ Verkauf (Short)</button>
+      </div>
+
       <div class="fields">
 
         <div class="field">
@@ -462,6 +485,15 @@
     });
   }
 
+  // ── Richtung (Long / Short) ──
+  let direction = 'long';
+  function setDir(d) {
+    direction = d;
+    el('dir-long').classList.toggle('active', d === 'long');
+    el('dir-short').classList.toggle('active', d === 'short');
+    calcSafety();
+  }
+
   // ── Shared inputs ──
   function shared() {
     return {
@@ -478,22 +510,32 @@
     const entry  = +el('s-entry').value     || fx;
     const thresh = +el('thresh').value      || 0;
 
-    const maintEur  = (n * maint) / fx;
-    const bufEur    = bal - maintEur;
-    const pipEur    = (12.50 / fx) * n;
-    const bufPips   = pipEur > 0 ? bufEur / pipEur : 0;
-    const liqPrice  = entry - bufPips * 0.0001;
+    const maintEur = (n * maint) / fx;           // Mindesteinschuss gesamt in €
+    const bufEur   = bal - maintEur;              // Puffer in €
+    const pipEur   = (12.50 / fx) * n;           // € pro Pip (alle Kontrakte)
+    const bufPips  = pipEur > 0 ? bufEur / pipEur : 0;
 
+    // Long: Kurs fällt → Liquidierung unterhalb Einstieg
+    // Short: Kurs steigt → Liquidierung oberhalb Einstieg
+    const liqPrice = direction === 'long'
+      ? entry - bufPips * 0.0001
+      : entry + bufPips * 0.0001;
+
+    // Puffer €
     const eurEl = el('s-buf-eur');
     eurEl.textContent = f(bufEur) + ' €';
     eurEl.className = 'rvalue ' + (bufEur <= thresh ? 'cr' : bufEur <= thresh * 1.5 ? 'cy' : 'cg');
 
+    // Puffer Pips
     const pipsEl = el('s-buf-pips');
     pipsEl.textContent = f(bufPips, 1);
     pipsEl.className = 'rvalue ' + (bufPips <= 50 ? 'cr' : bufPips <= 100 ? 'cy' : 'cg');
 
+    // Liquidierungskurs
+    const arrow = direction === 'long' ? '↓' : '↑';
     el('s-liq').textContent = f(liqPrice, 5);
-    el('s-liq-sub').textContent = `Einstieg ${f(entry,5)} − ${f(bufPips,1)} Pips`;
+    el('s-liq-sub').textContent =
+      `Einstieg ${f(entry, 5)}  ${arrow}  ${f(bufPips, 1)} Pips`;
 
     // Panic bar
     const ratio = thresh > 0 ? Math.min(bufEur / (thresh * 3), 1) : 1;
@@ -503,15 +545,18 @@
     if (bufEur <= thresh) {
       el('bar').style.background = 'var(--red)';
       box.className = 'sbox danger';
-      el('sbox-text').textContent = `STOP — Puffer ${f(bufEur)} € ≤ Grenze ${f(thresh)} € → Position reduzieren!`;
+      el('sbox-text').textContent =
+        `STOP — Puffer ${f(bufEur)} € ≤ Grenze ${f(thresh)} € → Position reduzieren!`;
     } else if (bufEur <= thresh * 1.5) {
       el('bar').style.background = 'var(--yellow)';
       box.className = 'sbox warn';
-      el('sbox-text').textContent = `Achtung — Puffer ${f(bufEur)} € nähert sich Grenze ${f(thresh)} €`;
+      el('sbox-text').textContent =
+        `Achtung — Puffer ${f(bufEur)} € nähert sich Grenze ${f(thresh)} €`;
     } else {
       el('bar').style.background = 'var(--green)';
       box.className = 'sbox ok';
-      el('sbox-text').textContent = `OK — Puffer ${f(bufEur)} € über Grenze ${f(thresh)} €`;
+      el('sbox-text').textContent =
+        `OK — Puffer ${f(bufEur)} € über Grenze ${f(thresh)} €`;
     }
   }
 
