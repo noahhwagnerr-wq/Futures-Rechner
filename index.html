@@ -293,17 +293,17 @@
 
       <div class="field">
         <div class="flabel">Kontostand <small>Eigenkapital in €</small></div>
-        <input type="number" id="balance" value="22000" min="0" step="100" />
+        <input type="number" id="balance" value="22000" min="0" step="100" oninput="calcAll()" />
       </div>
 
       <div class="field">
         <div class="flabel">EUR/USD Kurs <small>aktuell</small></div>
-        <input type="number" id="fx" value="1.16180" min="0.5" step="0.00001" />
+        <input type="number" id="fx" value="1.16180" min="0.5" step="0.00001" oninput="calcAll()" />
       </div>
 
       <div class="field">
         <div class="flabel">Mindesteinschuss / Kt. <small>Maintenance Margin in $</small></div>
-        <input type="number" id="maint" value="3181.06" min="0" step="0.01" />
+        <input type="number" id="maint" value="3181.06" min="0" step="0.01" oninput="calcAll()" />
       </div>
 
     </div>
@@ -333,12 +333,12 @@
 
         <div class="field">
           <div class="flabel">Kontrakte <small>Anzahl 6E</small></div>
-          <input type="number" id="s-contracts" value="5" min="1" step="1" />
+          <input type="number" id="s-contracts" value="5" min="1" step="1" oninput="calcSafety()" />
         </div>
 
         <div class="field">
           <div class="flabel">Einstiegskurs <small>EUR/USD</small></div>
-          <input type="number" id="s-entry" value="1.16180" min="0.5" step="0.00001" />
+          <input type="number" id="s-entry" value="1.16180" min="0.5" step="0.00001" oninput="calcSafety()" />
         </div>
 
       </div>
@@ -367,7 +367,7 @@
     <div class="panic">
       <div class="panic-top">
         <span>Alarm-Grenze €</span>
-        <input type="number" id="thresh" value="2000" min="0" step="100" />
+        <input type="number" id="thresh" value="2000" min="0" step="100" oninput="calcSafety()" />
       </div>
       <div class="bartrack"><div class="barfill" id="bar"></div></div>
       <div class="sbox ok" id="sbox">
@@ -390,17 +390,17 @@
 
         <div class="field">
           <div class="flabel">Mindest-Puffer <small>Pip-Abstand bis Margin-Call</small></div>
-          <input type="number" id="p-minpips" value="200" min="10" step="10" />
+          <input type="number" id="p-minpips" value="200" min="10" step="10" oninput="calcPosition()" />
         </div>
 
         <div class="field">
           <div class="flabel">Max. Verlust / Trade <small>% des Kontos</small></div>
-          <input type="number" id="p-risk" value="5" min="0.1" max="100" step="0.5" />
+          <input type="number" id="p-risk" value="5" min="0.1" max="100" step="0.5" oninput="calcPosition()" />
         </div>
 
         <div class="field">
           <div class="flabel">Stop-Loss Abstand <small>Pips (geplant)</small></div>
-          <input type="number" id="p-stoppips" value="30" min="1" step="1" />
+          <input type="number" id="p-stoppips" value="30" min="1" step="1" oninput="calcPosition()" />
         </div>
 
       </div>
@@ -583,13 +583,6 @@
   }
 
   function calcAll() { calcSafety(); calcPosition(); }
-
-  // Shared inputs
-  ['balance','fx','maint'].forEach(id => el(id).addEventListener('input', calcAll));
-  // Safety tab
-  ['s-contracts','s-entry','thresh'].forEach(id => el(id).addEventListener('input', calcSafety));
-  // Position tab
-  ['p-minpips','p-risk','p-stoppips'].forEach(id => el(id).addEventListener('input', calcPosition));
 
   calcAll();
 </script>
