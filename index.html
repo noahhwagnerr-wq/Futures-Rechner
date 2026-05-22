@@ -261,6 +261,23 @@
     .cr { color: var(--red); }
     .ca { color: var(--accent); }
 
+    /* ── Berechnen-Button ── */
+    .calc-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--r);
+      cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: opacity .15s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .calc-btn:active { opacity: 0.85; transform: scale(0.98); }
+
     footer { font-size: 0.67rem; color: var(--muted); text-align: center; margin-top: 6px; }
   </style>
 </head>
@@ -320,6 +337,8 @@
 
       </div>
     </div>
+
+    <button class="calc-btn" onclick="calcSafety()">Berechnen</button>
 
     <!-- Ergebnisse -->
     <div class="results">
@@ -382,6 +401,8 @@
 
       </div>
     </div>
+
+    <button class="calc-btn" onclick="calcPosition()">Berechnen</button>
 
     <!-- Methoden-Vergleich -->
     <div class="card">
